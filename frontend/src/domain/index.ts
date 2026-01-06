@@ -1,2 +1,2 @@
 // Domain modules export
-export {};
+export * as property from './property/_module';

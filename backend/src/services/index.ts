@@ -6,4 +6,4 @@
  * @module services
  */
 
-
+export * from './property';

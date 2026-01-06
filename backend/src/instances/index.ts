@@ -6,4 +6,7 @@
  * @module instances
  */
 
-
+/**
+ * Property instances
+ */
+export { propertyStore, codigoSequencialStore } from './property';
