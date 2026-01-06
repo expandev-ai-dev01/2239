@@ -9,6 +9,9 @@ const HomePage = lazy(() =>
 const PropertyCreatePage = lazy(() =>
   import('@/pages/PropertyCreate').then((module) => ({ default: module.PropertyCreatePage }))
 );
+const PropertyUpdatePage = lazy(() =>
+  import('@/pages/PropertyUpdate').then((module) => ({ default: module.PropertyUpdatePage }))
+);
 const NotFoundPage = lazy(() =>
   import('@/pages/NotFound').then((module) => ({ default: module.NotFoundPage }))
 );
@@ -43,6 +46,20 @@ const routes = createBrowserRouter([
             }
           >
             <PropertyCreatePage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'properties/:id/edit',
+        element: (
+          <Suspense
+            fallback={
+              <div className="flex h-full w-full items-center justify-center">
+                <LoadingSpinner />
+              </div>
+            }
+          >
+            <PropertyUpdatePage />
           </Suspense>
         ),
       },

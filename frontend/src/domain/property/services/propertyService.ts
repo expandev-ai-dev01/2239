@@ -9,7 +9,7 @@
 
 import { authenticatedClient } from '@/core/lib/api';
 import type { Property, CepValidationResponse } from '../types/models';
-import type { PropertyFormOutput } from '../types/forms';
+import type { PropertyFormOutput, PropertyUpdateFormOutput } from '../types/forms';
 
 export const propertyService = {
   /**
@@ -44,6 +44,17 @@ export const propertyService = {
   },
 
   /**
+   * Update existing property
+   */
+  async update(id: string, propertyData: PropertyUpdateFormOutput): Promise<Property> {
+    const { data } = await authenticatedClient.put<{ success: boolean; data: Property }>(
+      `/property/${id}`,
+      propertyData
+    );
+    return data.data;
+  },
+
+  /**
    * Validate CEP and get address data
    */
   async validateCep(cep: string): Promise<CepValidationResponse | null> {
@@ -58,7 +69,7 @@ export const propertyService = {
       }
 
       return data.data;
-    } catch (error) {
+    } catch (_error) {
       return null;
     }
   },

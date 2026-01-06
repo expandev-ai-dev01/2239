@@ -8,3 +8,5 @@
 export * from './propertyTypes';
 export * from './propertyService';
 export * from './propertyValidation';
+export * from './propertyUpdateService';
+export * from './propertyUpdateValidation';

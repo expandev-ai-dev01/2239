@@ -18,6 +18,7 @@ const router = Router();
 router.get('/property', propertyController.listHandler);
 router.post('/property', propertyController.createHandler);
 router.get('/property/:id', propertyController.getHandler);
+router.put('/property/:id', propertyController.updateHandler);
 router.post('/property/validate-cep', propertyController.validateCepHandler);
 
 export default router;

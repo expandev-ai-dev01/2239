@@ -8,7 +8,13 @@
 
 import { Request, Response, NextFunction } from 'express';
 import { successResponse, errorResponse, isServiceError } from '@/utils';
-import { propertyCreate, propertyList, propertyGet, validateCep } from '@/services/property';
+import {
+  propertyCreate,
+  propertyList,
+  propertyGet,
+  propertyUpdate,
+  validateCep,
+} from '@/services/property';
 
 /**
  * @api {get} /api/internal/property List Properties
@@ -140,6 +146,72 @@ export async function createHandler(
 export async function getHandler(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const data = await propertyGet(req.params.id);
+    res.json(successResponse(data));
+  } catch (error) {
+    if (isServiceError(error)) {
+      res.status(error.statusCode).json(errorResponse(error.message, error.code, error.details));
+      return;
+    }
+    next(error);
+  }
+}
+
+/**
+ * @api {put} /api/internal/property/:id Update Property
+ * @apiName UpdateProperty
+ * @apiGroup Property
+ *
+ * @apiParam {String} id Property UUID
+ *
+ * @apiBody {String} tipo_propriedade Property type (Casa | Apartamento | Kitnet | Loja | Sala Comercial | Galpão)
+ * @apiBody {String} endereco_completo Complete address (max 200 chars)
+ * @apiBody {String} cep Postal code (format: XXXXX-XXX)
+ * @apiBody {String} bairro Neighborhood (max 100 chars)
+ * @apiBody {String} cidade City (max 100 chars)
+ * @apiBody {String} estado State code (2 chars, valid UF)
+ * @apiBody {Number} area_total Total area in square meters (0.01 to 10000)
+ * @apiBody {Number|null} quartos Number of bedrooms (0-20, null for commercial)
+ * @apiBody {Number|null} banheiros Number of bathrooms (0-10)
+ * @apiBody {Number} vagas_garagem Number of garage spaces (0-20)
+ * @apiBody {Number} valor_aluguel Monthly rent value (must be > 0)
+ * @apiBody {Number|null} valor_condominio Monthly condominium fee (>= 0)
+ * @apiBody {Number|null} valor_iptu Annual property tax (>= 0)
+ * @apiBody {String|null} descricao Property description (max 1000 chars)
+ * @apiBody {String} status Property status (Disponível | Ocupada | Manutenção | Inativa)
+ *
+ * @apiSuccess {Boolean} success Success flag (always true)
+ * @apiSuccess {String} data.property_id Unique identifier (UUID)
+ * @apiSuccess {String} data.codigo_propriedade Property code
+ * @apiSuccess {String} data.tipo_propriedade Property type
+ * @apiSuccess {String} data.endereco_completo Complete address
+ * @apiSuccess {String} data.cep Postal code
+ * @apiSuccess {String} data.bairro Neighborhood
+ * @apiSuccess {String} data.cidade City
+ * @apiSuccess {String} data.estado State
+ * @apiSuccess {Number} data.area_total Total area
+ * @apiSuccess {Number|null} data.quartos Number of bedrooms
+ * @apiSuccess {Number|null} data.banheiros Number of bathrooms
+ * @apiSuccess {Number} data.vagas_garagem Garage spaces
+ * @apiSuccess {Number} data.valor_aluguel Monthly rent
+ * @apiSuccess {Number|null} data.valor_condominio Condominium fee
+ * @apiSuccess {Number|null} data.valor_iptu Property tax
+ * @apiSuccess {String|null} data.descricao Description
+ * @apiSuccess {String} data.status Current status
+ * @apiSuccess {String} data.data_cadastro ISO 8601 timestamp
+ * @apiSuccess {String} data.usuario_cadastro User who registered
+ *
+ * @apiError {Boolean} success Success flag (always false)
+ * @apiError {String} error.code Error code (NOT_FOUND | VALIDATION_ERROR | DUPLICATE_ADDRESS)
+ * @apiError {String} error.message Error message
+ * @apiError {Object} error.details Validation error details (if applicable)
+ */
+export async function updateHandler(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const data = await propertyUpdate(req.params.id, req.body);
     res.json(successResponse(data));
   } catch (error) {
     if (isServiceError(error)) {

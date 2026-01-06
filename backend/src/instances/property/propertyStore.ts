@@ -57,6 +57,14 @@ class PropertyStore {
   }
 
   /**
+   * Update existing record
+   */
+  update(property_id: string, data: PropertyEntity): PropertyEntity {
+    this.records.set(property_id, data);
+    return data;
+  }
+
+  /**
    * Check if record exists
    */
   exists(property_id: string): boolean {
