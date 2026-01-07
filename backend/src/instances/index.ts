@@ -10,3 +10,8 @@
  * Property instances
  */
 export { propertyStore, codigoSequencialStore } from './property';
+
+/**
+ * Property History instances
+ */
+export { propertyHistoryStore, propertyAuditStore } from './propertyHistory';

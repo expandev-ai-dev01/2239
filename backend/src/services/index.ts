@@ -7,3 +7,4 @@
  */
 
 export * from './property';
+export * from './propertyHistory';

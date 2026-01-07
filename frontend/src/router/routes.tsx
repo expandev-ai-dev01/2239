@@ -12,6 +12,9 @@ const PropertyCreatePage = lazy(() =>
 const PropertyUpdatePage = lazy(() =>
   import('@/pages/PropertyUpdate').then((module) => ({ default: module.PropertyUpdatePage }))
 );
+const PropertyHistoryPage = lazy(() =>
+  import('@/pages/PropertyHistory').then((module) => ({ default: module.PropertyHistoryPage }))
+);
 const NotFoundPage = lazy(() =>
   import('@/pages/NotFound').then((module) => ({ default: module.NotFoundPage }))
 );
@@ -60,6 +63,20 @@ const routes = createBrowserRouter([
             }
           >
             <PropertyUpdatePage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'properties/:id/history',
+        element: (
+          <Suspense
+            fallback={
+              <div className="flex h-full w-full items-center justify-center">
+                <LoadingSpinner />
+              </div>
+            }
+          >
+            <PropertyHistoryPage />
           </Suspense>
         ),
       },
